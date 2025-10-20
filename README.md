@@ -1,6 +1,6 @@
 # 2D Laser People Benchmark - FROG Dataset
 
-[[Preprint (arXiv)]](http://arxiv.org/abs/2306.08531) [[Dataset]](https://robotics.upo.es/datasets/frog/laser2d_people/) [[`laserscan_labeler` tool]](https://github.com/robotics-upo/laserscan_labeler)
+[[Article]](https://www.frontiersin.org/journals/robotics-and-ai/articles/10.3389/frobt.2025.1671673/full) [[Dataset]](https://robotics.upo.es/datasets/frog/laser2d_people/) [[`laserscan_labeler` tool]](https://github.com/robotics-upo/laserscan_labeler)
 
 ## Requirements
 
@@ -68,11 +68,15 @@ Each provided script starts with a series of Python variable assignments which c
 ## Reference
 
 ```
-@misc{frog2023,
-	author = {Fernando Amodeo and Noé Pérez-Higueras and Luis Merino and Fernando Caballero},
-	title = {FROG: A new people detection dataset for knee-high 2D range finders},
-	year = {2023},
-	eprint = {arXiv:2306.08531},
+@article{frog2025,
+	title = {FROG: a new people detection dataset for knee-high 2D range finders},
+	author = {Amodeo, Fernando  and Pérez-Higueras, Noé  and Merino, Luis  and Caballero, Fernando},
+	year = 2025,
+	journal = {Frontiers in Robotics and AI},
+	volume = {Volume 12 - 2025},
+	doi = {10.3389/frobt.2025.1671673},
+	issn = {2296-9144},
+	url = {https://www.frontiersin.org/journals/robotics-and-ai/articles/10.3389/frobt.2025.1671673},
 }
 ```
 
@@ -80,8 +84,10 @@ Each provided script starts with a series of Python variable assignments which c
 
 ![](logos/junta-and.png) ![](logos/minci.png)
 
-This work is partially funded by the Programa Operativo FEDER Andalucía 2014-2020,
-Consejería de Economía, Conocimiento y Universidades (DeepBot, PY20_00817) and by
-the projects NHoA PLEC2021-007868 and NORDIC TED2021-132476B-I00,
-funded by MCIN/AEI/10.13039/501100011033 and the European Union
-"NextGenerationEU"/"PRTR".
+The author(s) declare that financial support was received for the research and/or
+publication of this article. FA is supported by the predoctoral grant PRE2022-105119
+as part of the INSERTION project (PID2021-127648OB-C31), funded by Ministerio de
+Ciencia e Innovación. This work is partially supported by the project PICRAH4.0
+(PLEC2023-010353) funded by programa Transmisiones 2023 del Ministerio de Ciencia
+e Innovación, and by the project NORDIC (TED2021-132476B-I00) funded by
+MCIN/AEI/10.13039/501100011033 and the European Union “NextGenerationEU”/“PRTR”.
