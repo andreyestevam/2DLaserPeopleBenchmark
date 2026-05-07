@@ -4,7 +4,7 @@ from utils.segmentation import SegDataGenerator
 from utils.models import build_seg_model, dice_loss, mixed_loss, logistic_adapter
 from utils.training import pretty_train
 
-DATASET_FILE = 'frog_11-36_12-43_train_val.h5'
+DATASET_FILE = 'dataset/Training-validation set (11:36 and 12:43)/frog_11-36_12-43_train_val.h5'
 
 MODEL_NAME = 'LFE_seg'
 NUM_EPOCHS = 100
@@ -22,7 +22,7 @@ mdl.summary()
 
 # Compile model
 mdl.compile(
-	optimizer = tf.keras.optimizers.experimental.AdamW(learning_rate=0.001, weight_decay=0.004),
+	optimizer = tf.keras.optimizers.AdamW(learning_rate=0.001, weight_decay=0.004),
 	loss = mixed_loss, #weighted_ce_loss, #dice_loss,
 	metrics = [
 		logistic_adapter(tf.keras.metrics.BinaryAccuracy)(name='acc'),

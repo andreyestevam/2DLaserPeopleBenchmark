@@ -1,4 +1,7 @@
 import tensorflow as tf
+import keras
+from keras import layers
+import keras.ops as ops
 import numpy as np
 
 def logistic_adapter(clazz):
@@ -10,10 +13,17 @@ def logistic_adapter(clazz):
 	return AdaptedMetric
 
 def my_global_aggregator_block(x):
-	x_global = tf.keras.layers.GlobalMaxPool1D(keepdims=True)(x)
-	x_global = tf.broadcast_to(x_global, tf.shape(x))
-	x = tf.keras.layers.Concatenate()([x, x_global])
-	return x
+    seq_len = x.shape[1]
+
+    # IMPORTANT: no keepdims=True
+    g = layers.GlobalMaxPooling1D()(x)
+
+    g = layers.Dense(x.shape[-1])(g)
+
+    # now g is (batch, channels) → correct for RepeatVector
+    g = layers.RepeatVector(seq_len)(g)
+
+    return layers.Add()([x, g])
 
 def my_res_conv_block(x, filters, kernels, ac='relu', dp=0.2, bn=True, glob=False):
 	x2 = x
@@ -121,7 +131,7 @@ def loc_model_loss_with_mask(y_true, y_pred):
 	reg_loss_neg = diff - 0.5/sigma_squared
 	reg_loss = piecewise_branch*reg_loss_neg + (1.0-piecewise_branch)*reg_loss_pos
 	reg_loss = tf.reduce_sum(
-		tf.expand_dims(gt_mask*gt_objectness,axis=3)*reg_loss,
+		tf.reshape(gt_mask * gt_objectness, tf.shape(gt_mask) + (1,)),
 		axis=[1,2]) / num_pos_anchors[:,None]
 	reg_loss = tf.reduce_mean(reg_loss, axis=1)
 
@@ -130,7 +140,7 @@ def loc_model_loss_with_mask(y_true, y_pred):
 
 def build_backbone(name=None, glob=False):
 	# Input layer
-	y = x = tf.keras.Input(shape=(None, 1))
+	y = x = tf.keras.Input(shape=(720, 1))
 
 	# Downscaling path
 	y = y_1 = my_res_conv_block(y, filters=[32, 32, 32], kernels=[9, 7, 5])
@@ -143,7 +153,7 @@ def build_backbone(name=None, glob=False):
 
 def build_seg_model(name=None, backbone=None, is_logistic=False, glob=False):
 	# Input layer
-	y = x = tf.keras.Input(shape=(None, 1))
+	y = x = tf.keras.Input(shape=(720, 1))
 
 	# Downscaling path (backbone)
 	if backbone is None:
@@ -170,7 +180,7 @@ def extract_seg_out(batch, is_logistic=True):
 
 def build_loc_model(name=None, backbone=None, num_anchors_per_sector=6, glob=False):
 	# Input layer
-	y = x = tf.keras.Input(shape=(None, 1))
+	y = x = tf.keras.Input(shape=(720, 1))
 
 	# Feature extractor (backbone)
 	if backbone is None:
@@ -193,7 +203,12 @@ def build_loc_model(name=None, backbone=None, num_anchors_per_sector=6, glob=Fal
 	return tf.keras.Model(inputs=x, outputs=y, name=name)
 
 def extract_loc_out(batch):
-	out = np.empty(tf.shape(batch), dtype=np.float32)
-	out[:,:,:,0]   = tf.nn.sigmoid(batch[:,:,:,0]).numpy()
-	out[:,:,:,1:3] = batch[:,:,:,1:3].numpy()
+	batch = batch.numpy()
+	
+	out = np.empty(batch.shape, dtype=np.float32)
+	
+	out[:,:,:,0] = 1 / (1 + np.exp(-batch[:,:,:,0]))  # sigmoid
+	
+	out[:,:,:,1:3] = batch[:,:,:,1:3]
+	
 	return out
