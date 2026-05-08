@@ -4,13 +4,12 @@ test/
 qualit/
 __pycache__/
 *~
-*.h5
 *.xz
 *.npy
-*.npz
 *.pth
 *.old
-*.png
 *.jpg
 *.mp4
 *.onnx
+dataset/
+dataset/
