@@ -12,4 +12,3 @@ __pycache__/
 *.mp4
 *.onnx
 dataset/
-dataset/
