@@ -27,8 +27,8 @@ from scipy.signal import find_peaks
 from torch.utils.data import DataLoader
 import h5py
 
-from frog_dataset import FrogDataset, LASER_NUM_POINTS, MAX_RANGE
-from lfe_model    import LFESegmentation
+from andrey.dataset_understanding.frog_dataset import FrogDataset, LASER_NUM_POINTS, MAX_RANGE
+from andrey.dataset_understanding.lfe_model    import LFESegmentation
 
 
 # ─────────────────────────────────────────────
