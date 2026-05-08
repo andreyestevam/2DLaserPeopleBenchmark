@@ -5,7 +5,7 @@ from tqdm import tqdm
 from sklearn.metrics import auc
 np.tau = math.tau
 
-DATASET_FILE = 'frog_16-41_test.h5'
+DATASET_FILE = '/home/profi/projects/HiveLab/FROG/2DLaserPeopleBenchmark/dataset/Testing set (16:41)/frog_16-41_test.h5'
 
 #RESULTS_FILE = 'petra_frog.npz'
 #RESULTS_FILE = 'petra_frog_mixedloss.npz'
