@@ -1,0 +1,25 @@
+
+====================================================
+LFE Evaluation Report — FROG Test Set
+====================================================
+Test scans evaluated  : 50,088
+Total detections made : 20,276
+Avg detections/scan   : 0.40
+
+--- Quick Metrics (assoc_dist = 0.5m) ---
+True Positives        : 0
+False Positives       : 20,276
+False Negatives       : 153,655
+Precision             : 0.0000
+Recall                : 0.0000
+F1 Score              : 0.0000
+
+--- Files ---
+Benchmark detections  : results/detections.npz
+Visualizations        : results/detection_samples.png
+
+--- Next Steps ---
+Run the official FROG benchmark:
+    python calc_pr_curve.py
+    python benchmark.py
+====================================================

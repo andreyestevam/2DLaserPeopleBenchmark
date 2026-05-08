@@ -21,8 +21,8 @@ import torch.nn as nn
 from torch.utils.data import DataLoader
 import numpy as np
 
-from dataset_understanding.frog_dataset import FrogDataset
-from dataset_understanding.lfe_model    import LFESegmentation
+from frog_dataset import FrogDataset
+from lfe_model    import LFESegmentation
 
 
 # ─────────────────────────────────────────────

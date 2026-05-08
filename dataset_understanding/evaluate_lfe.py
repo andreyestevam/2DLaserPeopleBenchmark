@@ -25,6 +25,7 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 from scipy.signal import find_peaks
 from torch.utils.data import DataLoader
+import h5py
 
 from frog_dataset import FrogDataset, LASER_NUM_POINTS, MAX_RANGE
 from lfe_model    import LFESegmentation
@@ -334,10 +335,15 @@ def main():
     print("\nCalculating quick metrics (assoc_dist=0.5m)...")
     total_tp, total_fp, total_fn = 0, 0, 0
 
-    for i in range(len(test_ds)):
-        idx = test_ds.circle_idx[i]
-        num = test_ds.circle_num[i]
-        gt  = test_ds.circles[idx: idx + num]
+    with h5py.File(args.test_file, 'r') as f:
+        gt_circle_idx = f['circle_idx'][:]
+        gt_circle_num = f['circle_num'][:]
+        gt_circles    = f['circles'][:]
+
+    for i, orig_idx in enumerate(test_ds.original_indices):
+        idx = gt_circle_idx[orig_idx]
+        num = gt_circle_num[orig_idx]
+        gt  = gt_circles[idx: idx + num]
         tp, fp, fn = match_detections_to_gt(all_detections[i], gt, assoc_dist=0.5)
         total_tp += tp
         total_fp += fp

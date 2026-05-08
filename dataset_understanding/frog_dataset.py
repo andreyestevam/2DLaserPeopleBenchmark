@@ -13,7 +13,7 @@ from torch.utils.data import Dataset
 # Constants matching FROG sensor specs
 # ─────────────────────────────────────────────
 LASER_NUM_POINTS = 720
-MAX_RANGE        = 10.0   # meters
+MAX_RANGE = 61.0   # meters
 PERSON_RADIUS    = 0.5    # meters — used for segmentation target
 
 
@@ -54,6 +54,7 @@ class FrogDataset(Dataset):
         populated = circle_num[indices] > 0
         indices   = indices[populated]
 
+        self.original_indices = indices
         self.scans      = scans[indices]           # (N', 720)
         self.circle_idx = circle_idx[indices]      # (N',)
         self.circle_num = circle_num[indices]      # (N',)
@@ -69,11 +70,9 @@ class FrogDataset(Dataset):
 
         # ── Preprocessing ──────────────────────────────
         # Clip to max range and replace invalid readings
-        scan = np.clip(scan, 0.0, MAX_RANGE)
-        scan[~np.isfinite(scan)] = MAX_RANGE
-
-        # Normalise to [0, 1]
-        scan = scan / MAX_RANGE
+        scan = np.where(np.isfinite(scan), scan, 61.0)
+        scan = np.clip(scan, 0.0, 61.0)
+        scan = scan / 61.0
 
         # ── Build segmentation target ──────────────────
         target = self._build_segmentation_mask(i, scan * MAX_RANGE)
